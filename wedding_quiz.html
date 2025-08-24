@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>結婚式 謎解きチャレンジ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap');
+
+    body {
+      font-family: 'Kosugi Maru', sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(120deg, #ffe4e1, #fff0f5);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    h1 {
+      color: #d4556f;
+      font-size: 28px;
+      margin-bottom: 10px;
+      text-shadow: 1px 1px #fff;
+    }
+
+    p {
+      font-size: 16px;
+      color: #555;
+    }
+
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      margin: 5px;
+      width: 80%;
+      max-width: 300px;
+      border-radius: 10px;
+      border: 1px solid #d4556f;
+    }
+
+    button {
+      background-color: #d4556f;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #c04460;
+      transform: scale(1.05);
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 22px;
+      font-weight: bold;
+      min-height: 28px;
+    }
+
+    .radio-group {
+      margin: 10px 0;
+    }
+
+    .radio-group label {
+      margin: 0 10px;
+      font-size: 16px;
+    }
+
+    .petal, .tear {
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .petal {
+      font-size: 24px;
+      animation-name: fallPetal;
+      animation-timing-function: linear;
+      animation-iteration-count: 1;
+    }
+
+    @keyframes fallPetal {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(600px) rotate(360deg); opacity: 0; }
+    }
+
+    .tear {
+      font-size: 20px;
+      animation-name: fallTear;
+      animation-timing-function: linear;
+      animation-iteration-count: 1;
+    }
+
+    @keyframes fallTear {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(400px) rotate(180deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <h1>💐 結婚式 謎解きチャレンジ 💐</h1>
+  <p>お名前と答え、そして新郎側か新婦側かを選んでください</p>
+
+  <input type="text" id="name" placeholder="お名前"><br>
+  <input type="text" id="answer" placeholder="答え"><br>
+
+  <div class="radio-group">
+    <label><input type="radio" name="side" value="新郎側"> 新郎側</label>
+    <label><input type="radio" name="side" value="新婦側"> 新婦側</label>
+  </div>
+
+  <button onclick="checkAnswer()">🎉 送信 🎉</button>
+
+  <div class="result" id="result"></div>
+
+  <!-- 正解サウンド -->
+  <audio id="successSound" src="https://actions.google.com/sounds/v1/celebration/fireworks.ogg" preload="auto"></audio>
+
+  <script>
+    const correctAnswers = ["花占い","ハナウラナイ","はなうらない","花うらない","はな占い"];
+
+    function checkAnswer() {
+      const name = document.getElementById("name").value.trim();
+      const answer = document.getElementById("answer").value.trim();
+      const side = document.querySelector('input[name="side"]:checked')?.value;
+      const resultDiv = document.getElementById("result");
+
+      if (!name || !answer || !side) {
+        resultDiv.textContent = "名前・答え・新郎側/新婦側を選択してください";
+        resultDiv.style.color = "orange";
+        return;
+      }
+
+      const normalizedAnswer = answer.replace(/\s+/g,"").toLowerCase();
+      const isCorrect = correctAnswers.some(ans => ans.replace(/\s+/g,"").toLowerCase() === normalizedAnswer);
+
+      if (isCorrect) {
+        resultDiv.textContent = "🎉 正解です！おめでとう！";
+        resultDiv.style.color = "green";
+        sendToGoogleForm(name, answer, side);
+        playSuccessSound();
+        launchPetals(true); // 花吹雪を画面全体に残す
+      } else {
+        resultDiv.textContent = "❌ 不正解です。もう一度挑戦してね。";
+        resultDiv.style.color = "red";
+        launchTears();
+      }
+    }
+
+    function sendToGoogleForm(name, answer, side) {
+      const formURL = "https://docs.google.com/forms/d/e/【GoogleフォームID】/formResponse";
+      const formData = new FormData();
+      formData.append("entry.1234567890", name);
+      formData.append("entry.0987654321", answer);
+      formData.append("entry.1122334455", side);
+
+      fetch(formURL, { method: "POST", body: formData })
+        .then(()=>console.log("正解者情報を送信"))
+        .catch(()=>console.error("送信失敗"));
+    }
+
+    function playSuccessSound() {
+      const audio = document.getElementById('successSound');
+      audio.currentTime = 0;
+      audio.play();
+    }
+
+    function launchPetals(stay=false) {
+      for (let i=0; i<30; i++) {
+        const petal = document.createElement('div');
+        petal.className = 'petal';
+        petal.textContent = '🌸';
+        petal.style.left = Math.random()*window.innerWidth + 'px';
+        petal.style.animationDuration = (2 + Math.random()*2) + 's';
+        petal.style.fontSize = (20 + Math.random()*20) + 'px';
+        document.body.appendChild(petal);
+
+        if (!stay) {
+          setTimeout(()=>{ petal.remove(); }, 3000);
+        }
+      }
+    }
+
+    function launchTears() {
+      for (let i=0; i<15; i++) {
+        const tear = document.createElement('div');
+        tear.className = 'tear';
+        tear.textContent = '💧';
+        tear.style.left = Math.random()*window.innerWidth + 'px';
+        tear.style.animationDuration = (2 + Math.random()*1.5) + 's';
+        tear.style.fontSize = (16 + Math.random()*12) + 'px';
+        document.body.appendChild(tear);
+        setTimeout(()=>{ tear.remove(); }, 2500);
+      }
+    }
+  </script>
+</body>
+</html>
