@@ -10,33 +10,42 @@ body {
   font-family: 'Kosugi Maru', sans-serif;
   text-align: center;
   padding: 20px;
-  background: linear-gradient(120deg, #ffe4e1, #fff0f5);
+  background: #fffaf5 url('https://www.transparenttextures.com/patterns/paper-fibers.png'); /* 紙っぽい背景 */
   min-height: 100vh;
   overflow-x: hidden;
-  position: relative;
 }
+
+/* ===== 額縁風タイトル ===== */
 h1 {
-  color:#d4556f;
+  color:#b76e79;
   font-size:26px;
-  margin-bottom:15px;
-  text-shadow:1px 1px #fff;
+  margin:20px auto;
+  padding:15px;
+  max-width: 420px;
+  border: 6px double #d4af37;
+  border-radius: 16px;
+  background: #fff8f8;
   line-height:1.6;
-  word-break: keep-all;
+  box-shadow: 0 0 10px rgba(212,175,55,0.3);
 }
 @media (max-width:480px) {
-  h1 {
-    font-size:22px;  /* スマホでは少し小さめ */
-  }
+  h1 { font-size:22px; }
 }
+
 p { font-size:16px; color:#555; margin-bottom:15px; }
+
+/* ===== 入力欄 ===== */
 input, button {
   padding:14px; font-size:18px; margin:8px 0; width:90%; max-width:320px;
-  border-radius:12px; border:2px solid #d4556f; box-sizing:border-box; transition:0.3s;
+  border-radius:12px; border:2px solid #b76e79; box-sizing:border-box; transition:0.3s;
 }
-input:focus { outline:none; border-color:#f080a0; }
-button { background-color:#d4556f; color:white; border:none; cursor:pointer; transform-origin:center; }
-button:hover { transform:scale(1.05); background-color:#c04460; }
+input:focus { outline:none; border-color:#d4af37; }
+button { background-color:#b76e79; color:white; border:none; cursor:pointer; transform-origin:center; }
+button:hover { transform:scale(1.05); background-color:#9a5663; }
+
 .result { margin-top:20px; font-size:22px; font-weight:bold; min-height:28px; word-wrap:break-word; transition: transform 0.3s, color 0.3s; }
+
+/* ラジオボタン */
 .radio-group {
   margin:10px 0;
   display: flex;
@@ -44,12 +53,28 @@ button:hover { transform:scale(1.05); background-color:#c04460; }
   gap: 20px;
 }
 .radio-group label { font-size:16px; }
+
+/* メッセージ */
 .extra-msg { margin-top:10px; font-size:16px; color:#444; }
-.sparkle { position:absolute; width:4px; height:4px; background:white; border-radius:50%; opacity:0.8; animation:sparkleAnim 3s linear infinite; }
-@keyframes sparkleAnim { 
-  0% {transform:translateY(0) scale(1); opacity:0.8;} 
-  50% {opacity:0.3;} 
-  100% {transform:translateY(600px) scale(0.5); opacity:0;} 
+
+/* 背景にちょっと謎解き感（鍵アイコンを薄く） */
+body::before {
+  content: "🔑";
+  font-size: 120px;
+  color: rgba(183,110,121,0.08);
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  transform: rotate(-15deg);
+}
+body::after {
+  content: "❓";
+  font-size: 140px;
+  color: rgba(183,110,121,0.05);
+  position: fixed;
+  top: 40px;
+  left: 10px;
+  transform: rotate(10deg);
 }
 </style>
 </head>
@@ -58,8 +83,9 @@ button:hover { transform:scale(1.05); background-color:#c04460; }
   板倉家 仁田家 結婚式<br>
   謎解き回答ページ
 </h1>
-<p>お名前と答え、そして新郎側か新婦側かを選んでください</p>
-<input type="text" id="name" placeholder="お名前"><br>
+
+<p>お名前（フルネーム）と答え、そして新郎側か新婦側かを選んでください</p>
+<input type="text" id="name" placeholder="お名前（フルネーム）"><br>
 <input type="text" id="answer" placeholder="答え"><br>
 <div class="radio-group">
   <label><input type="radio" name="side" value="新郎側"> 新郎側</label>
@@ -79,10 +105,10 @@ function checkAnswer() {
   const resultDiv=document.getElementById("result");
   const extraMsg=document.getElementById("extraMsg");
 
-  extraMsg.textContent=""; // 前回のメッセージをリセット
+  extraMsg.textContent=""; 
 
   if(!name || !answer || !side){
-    resultDiv.textContent="名前・答え・新郎側/新婦側を選択してください";
+    resultDiv.textContent="名前（フルネーム）・答え・新郎側/新婦側を選択してください";
     resultDiv.style.color="orange";
     return;
   }
@@ -119,16 +145,6 @@ function sendToGoogleForm(name,answer,side){
   fetch(formURL,{method:"POST",body:formData})
     .then(()=>console.log("正解者情報を送信"))
     .catch(()=>console.error("送信失敗"));
-}
-
-// 背景キラキラ
-for(let i=0;i<50;i++){
-  const sparkle=document.createElement('div');
-  sparkle.className='sparkle';
-  sparkle.style.left=Math.random()*window.innerWidth+'px';
-  sparkle.style.top=Math.random()*window.innerHeight+'px';
-  sparkle.style.animationDuration=(2+Math.random()*3)+'s';
-  document.body.appendChild(sparkle);
 }
 </script>
 </body>
