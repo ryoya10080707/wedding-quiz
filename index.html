@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>板倉家 仁田家 スペシャル謎解き</title>
+<title>板倉家 仁田家 結婚式 謎解き回答ページ</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap');
@@ -15,17 +15,20 @@ body {
   overflow-x: hidden;
   position: relative;
 }
-h1 { 
-  color:#d4556f; 
-  font-size:26px; 
-  margin-bottom:15px; 
+h1 {
+  color:#d4556f;
+  font-size:26px;
+  margin-bottom:15px;
   text-shadow:1px 1px #fff;
+  line-height:1.6;
+  word-break: keep-all;
 }
-p { 
-  font-size:16px; 
-  color:#555; 
-  margin-bottom:15px; 
+@media (max-width:480px) {
+  h1 {
+    font-size:22px;  /* スマホでは少し小さめ */
+  }
 }
+p { font-size:16px; color:#555; margin-bottom:15px; }
 input, button {
   padding:14px; font-size:18px; margin:8px 0; width:90%; max-width:320px;
   border-radius:12px; border:2px solid #d4556f; box-sizing:border-box; transition:0.3s;
@@ -34,16 +37,13 @@ input:focus { outline:none; border-color:#f080a0; }
 button { background-color:#d4556f; color:white; border:none; cursor:pointer; transform-origin:center; }
 button:hover { transform:scale(1.05); background-color:#c04460; }
 .result { margin-top:20px; font-size:22px; font-weight:bold; min-height:28px; word-wrap:break-word; transition: transform 0.3s, color 0.3s; }
-.radio-group { 
-  margin:10px 0; 
-  display:flex; 
-  flex-direction:column; 
-  align-items:center; 
+.radio-group {
+  margin:10px 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
-.radio-group label { 
-  margin:6px 0; 
-  font-size:16px; 
-}
+.radio-group label { font-size:16px; }
 .extra-msg { margin-top:10px; font-size:16px; color:#444; }
 .sparkle { position:absolute; width:4px; height:4px; background:white; border-radius:50%; opacity:0.8; animation:sparkleAnim 3s linear infinite; }
 @keyframes sparkleAnim { 
@@ -54,17 +54,17 @@ button:hover { transform:scale(1.05); background-color:#c04460; }
 </style>
 </head>
 <body>
-<h1>💐 板倉家 仁田家 スペシャル謎解き 💐</h1>
+<h1>
+  板倉家 仁田家 結婚式<br>
+  謎解き回答ページ
+</h1>
 <p>お名前と答え、そして新郎側か新婦側かを選んでください</p>
-
 <input type="text" id="name" placeholder="お名前"><br>
 <input type="text" id="answer" placeholder="答え"><br>
-
 <div class="radio-group">
   <label><input type="radio" name="side" value="新郎側"> 新郎側</label>
   <label><input type="radio" name="side" value="新婦側"> 新婦側</label>
 </div>
-
 <button onclick="checkAnswer()">🎉 送信 🎉</button>
 <div class="result" id="result"></div>
 <div class="extra-msg" id="extraMsg"></div>
@@ -133,4 +133,3 @@ for(let i=0;i<50;i++){
 </script>
 </body>
 </html>
-
