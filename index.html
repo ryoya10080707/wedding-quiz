@@ -66,15 +66,7 @@ body::before {
   bottom: 20px;
   right: 20px;
   transform: rotate(-15deg);
-}
-body::after {
-  content: "❓";
-  font-size: 140px;
-  color: rgba(183,110,121,0.05);
-  position: fixed;
-  top: 40px;
-  left: 10px;
-  transform: rotate(10deg);
+
 }
 </style>
 </head>
@@ -84,7 +76,7 @@ body::after {
   謎解き回答ページ
 </h1>
 
-<p>お名前（フルネーム）と答え、そして新郎側か新婦側かを選んでください</p>
+<p>お名前と答え、そして新郎側か新婦側かを選んでください</p>
 <input type="text" id="name" placeholder="お名前（フルネーム）"><br>
 <input type="text" id="answer" placeholder="答え"><br>
 <div class="radio-group">
@@ -149,3 +141,4 @@ function sendToGoogleForm(name,answer,side){
 </script>
 </body>
 </html>
+
