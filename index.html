@@ -121,9 +121,9 @@ function animateResult(){
 function sendToGoogleForm(name,answer,side){
   const formURL="https://docs.google.com/forms/d/e/1FAIpQLSdupmnRYVv81sjA5Hiajx5PXcRqbKNcKfKocMA3ulXCu9ux6w/formResponse";
   const formData=new FormData();
-  formData.append("entry.1234567890",name);
-  formData.append("entry.0987654321",answer);
-  formData.append("entry.1122334455",side);
+  formData.append("entry.233805573",name);
+  formData.append("entry.785699236",answer);
+  formData.append("entry.389755967",side);
   fetch(formURL,{method:"POST",body:formData})
     .then(()=>console.log("正解者情報を送信"))
     .catch(()=>console.error("送信失敗"));
@@ -131,6 +131,7 @@ function sendToGoogleForm(name,answer,side){
 </script>
 </body>
 </html>
+
 
 
 
