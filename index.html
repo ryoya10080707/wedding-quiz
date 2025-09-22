@@ -2,101 +2,75 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>板倉家 仁田家 結婚式 謎解き解答フォーム</title>
+  <title>謎解きチャレンジ</title>
   <style>
     body {
-      font-family: "Helvetica Neue", Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background: #f9f9f9;
-    }
-    h1 {
-      font-size: 20px;
-      line-height: 1.4;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    form {
-      background: #fff;
-      padding: 15px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      max-width: 480px;
-      margin: auto;
-    }
-    label {
-      display: flex;
-      align-items: center;
-      font-size: 16px;
-      margin: 8px 0;
-    }
-    input[type="radio"] {
-      margin-right: 8px;
-      transform: scale(1.2);
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    button {
-      display: block;
-      width: 100%;
-      background: #007BFF;
-      color: #fff;
-      border: none;
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0056b3;
+      font-family: Arial, sans-serif;
+      margin: 20px;
     }
 
-    /* 仙人イラスト */
+    h1 {
+      text-align: center;
+    }
+
+    .checkbox-group {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      margin: 20px 0;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+    }
+
+    /* 仙人のスタイル */
     #sennin {
       position: fixed;
-      right: 10px;
-      bottom: 10px;
-      width: 100px;
+      bottom: 20px;
+      right: 20px;
+      width: 150px;
       opacity: 0;
-      transition: opacity 0.5s ease-in-out;
-      z-index: 999;
+      transition: opacity 0.6s ease;
+      z-index: 1000;
     }
-    #sennin.show {
+
+    #sennin.visible {
       opacity: 1;
     }
   </style>
 </head>
 <body>
-  <h1>
-    板倉家 仁田家 結婚式<br>
-    謎解き解答フォーム
-  </h1>
+  <h1>謎解きチャレンジ</h1>
 
-  <form>
-    <div class="form-group">
-      <label><input type="radio" name="side" value="groom"> 新郎側</label>
-      <label><input type="radio" name="side" value="bride"> 新婦側</label>
-    </div>
-    <div class="form-group">
-      <label for="answer">解答:</label>
-      <input type="text" id="answer" name="answer" style="width:100%; padding:8px; font-size:16px;">
-    </div>
-    <button type="submit">送信</button>
-  </form>
+  <div class="checkbox-group">
+    <label class="checkbox-item">
+      <input type="checkbox" name="side" value="groom"> 新郎側
+    </label>
+    <label class="checkbox-item">
+      <input type="checkbox" name="side" value="bride"> 新婦側
+    </label>
+  </div>
+
+  <p>※下にスクロールしていくと仙人が現れるぞ…！</p>
+
+  <div style="height: 1500px;">
+    <p>ここはスクロール用のスペースです。</p>
+    <p>もっと下に行ってみてください。</p>
+  </div>
 
   <!-- 仙人イラスト -->
   <img id="sennin" src="sennin.png" alt="謎解き仙人">
 
   <script>
-    // スクロールしたら仙人出現
-    window.addEventListener("scroll", () => {
-      const sennin = document.getElementById("sennin");
-      if (window.scrollY > 200) {
-        sennin.classList.add("show");
-      } else {
-        sennin.classList.remove("show");
+    const sennin = document.getElementById('sennin');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        sennin.classList.add('visible');
       }
     });
   </script>
