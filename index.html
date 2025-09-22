@@ -2,139 +2,103 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>結婚式 謎解きチャレンジ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>板倉家 仁田家 結婚式 謎解き解答フォーム</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap');
-    body { font-family: 'Kosugi Maru', sans-serif; text-align: center; padding: 20px; background: linear-gradient(120deg, #ffe4e1, #fff0f5); min-height: 100vh; overflow-x: hidden; position: relative; }
-    h1 { color:#d4556f; font-size:26px; margin-bottom:15px; text-shadow:1px 1px #fff;}
-    p { font-size:16px; color:#555; margin-bottom:15px; }
-    input, button { padding:14px; font-size:18px; margin:8px 0; width:90%; max-width:320px; border-radius:12px; border:2px solid #d4556f; box-sizing:border-box; transition:0.3s; }
-    input:focus { outline:none; border-color:#f080a0; }
-    button { background-color:#d4556f; color:white; border:none; cursor:pointer; transform-origin:center; }
-    button:hover { transform:scale(1.05); background-color:#c04460; }
-    .result { margin-top:20px; font-size:22px; font-weight:bold; min-height:28px; word-wrap:break-word; transition: transform 0.3s, color 0.3s; }
-    .radio-group { margin:10px 0; }
-    .radio-group label { margin:0 10px; font-size:16px; }
-    .extra-msg { margin-top:10px; font-size:16px; color:#444; }
+    body {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    h1 {
+      font-size: 20px;
+      line-height: 1.4;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    form {
+      background: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-width: 480px;
+      margin: auto;
+    }
+    label {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      margin: 8px 0;
+    }
+    input[type="radio"] {
+      margin-right: 8px;
+      transform: scale(1.2);
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    button {
+      display: block;
+      width: 100%;
+      background: #007BFF;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
 
-    .sparkle { position:absolute; width:4px; height:4px; background:white; border-radius:50%; opacity:0.8; animation:sparkleAnim 3s linear infinite; }
-    @keyframes sparkleAnim { 0% {transform:translateY(0) scale(1); opacity:0.8;} 50% {opacity:0.3;} 100% {transform:translateY(600px) scale(0.5); opacity:0;} }
-
-    /* 仙人アイコン（目立たない場所に常駐） */
-    #sennin { position: fixed; width: 64px; height: auto; bottom: 18px; right: 18px; opacity: 0.68; border-radius: 8px; cursor: pointer; z-index: 9999; transition: transform 0.18s ease, opacity 0.18s; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
-    #sennin:hover { transform: scale(1.06); opacity: 1; }
-
-    /* 小さい画面ではさらに小さく */
-    @media (max-width:420px){ #sennin{ width:52px; bottom:12px; right:12px; } }
+    /* 仙人イラスト */
+    #sennin {
+      position: fixed;
+      right: 10px;
+      bottom: 10px;
+      width: 100px;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      z-index: 999;
+    }
+    #sennin.show {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
-  <h1>💐 結婚式 謎解きチャレンジ 💐</h1>
-  <p>お名前と答え、そして新郎側か新婦側かを選んでください</p>
-  <input type="text" id="name" placeholder="お名前"><br>
-  <input type="text" id="answer" placeholder="答え"><br>
-  <div class="radio-group">
-    <label><input type="radio" name="side" value="新郎側"> 新郎側</label>
-    <label><input type="radio" name="side" value="新婦側"> 新婦側</label>
-  </div>
-  <button onclick="checkAnswer()">🎉 送信 🎉</button>
-  <div class="result" id="result"></div>
-  <div class="extra-msg" id="extraMsg"></div>
+  <h1>
+    板倉家 仁田家 結婚式<br>
+    謎解き解答フォーム
+  </h1>
 
-  <!-- 目立たない場所に置く仙人アイコン。画像ファイル名は同じフォルダの sennin.png を想定 -->
-  <img id="sennin" src="sennin.png" alt="謎解き仙人" title="タップで謎解き指南書をダウンロード">
+  <form>
+    <div class="form-group">
+      <label><input type="radio" name="side" value="groom"> 新郎側</label>
+      <label><input type="radio" name="side" value="bride"> 新婦側</label>
+    </div>
+    <div class="form-group">
+      <label for="answer">解答:</label>
+      <input type="text" id="answer" name="answer" style="width:100%; padding:8px; font-size:16px;">
+    </div>
+    <button type="submit">送信</button>
+  </form>
+
+  <!-- 仙人イラスト -->
+  <img id="sennin" src="sennin.png" alt="謎解き仙人">
 
   <script>
-    // 正答リスト（必要に応じて増やす）
-    const correctAnswers = ["花占い","ハナウラナイ","はなうらない","花うらない","はな占い"];
-
-    function checkAnswer(){
-      const name = document.getElementById("name").value.trim();
-      const answer = document.getElementById("answer").value.trim();
-      const side = document.querySelector('input[name="side"]:checked')?.value;
-      const resultDiv = document.getElementById("result");
-      const extraMsg = document.getElementById("extraMsg");
-      extraMsg.textContent = "";
-
-      if(!name || !answer || !side){
-        resultDiv.textContent = "名前・答え・新郎側/新婦側を選択してください";
-        resultDiv.style.color = "orange";
-        return;
-      }
-
-      const normalized = answer.replace(/\s+/g,"").toLowerCase();
-      const isCorrect = correctAnswers.some(ans => ans.replace(/\s+/g,"").toLowerCase() === normalized);
-
-      if(isCorrect){
-        resultDiv.textContent = `🎉 ${name} さん正解！おめでとう！`;
-        resultDiv.style.color = "green";
-        extraMsg.textContent = "✅ ゲスト情報が新郎新婦に送信されました";
-        animateResult();
-        sendToGoogleForm(name, answer, side); // 既存のフォーム送信（GoogleフォームIDを差し替えてください）
+    // スクロールしたら仙人出現
+    window.addEventListener("scroll", () => {
+      const sennin = document.getElementById("sennin");
+      if (window.scrollY > 200) {
+        sennin.classList.add("show");
       } else {
-        resultDiv.textContent = "❌ 不正解です。もう一度挑戦してね。";
-        resultDiv.style.color = "red";
+        sennin.classList.remove("show");
       }
-    }
-
-    function animateResult(){
-      const resultDiv = document.getElementById("result");
-      resultDiv.animate([{ transform: "scale(1.2)", color: resultDiv.style.color }, { transform: "scale(1)" }], { duration: 600, easing: "ease-out" });
-    }
-
-    function sendToGoogleForm(name, answer, side){
-      // Googleフォーム送信先は実際の formResponse URL と entry.xxxxx を置き換えてください
-      const formURL = "https://docs.google.com/forms/d/e/【GoogleフォームID】/formResponse";
-      const formData = new FormData();
-      formData.append("entry.1234567890", name);
-      formData.append("entry.0987654321", answer);
-      formData.append("entry.1122334455", side);
-      fetch(formURL, { method: "POST", body: formData })
-        .then(() => console.log("正解者情報を送信"))
-        .catch(() => console.error("送信失敗"));
-    }
-
-    // PDF をダウンロードするユーティリティ。PDFファイルは同じフォルダの guide.pdf を想定。
-    async function downloadPDF(path, filename){
-      try{
-        // fetch -> blob -> download の流れ（同一オリジンなら動作）。
-        const response = await fetch(path);
-        if(!response.ok){
-          // fetch が失敗したら新しいタブで開く
-          window.open(path, '_blank');
-          return;
-        }
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-      }catch(e){
-        // Safari / iOS 等で fetch がブロックされる場合のフォールバック
-        window.open(path, '_blank');
-      }
-    }
-
-    // 仙人クリックでダウンロード
-    document.getElementById('sennin').addEventListener('click', function(){
-      // ファイル名は必要に応じて変更してください
-      downloadPDF('guide.pdf', '謎解き指南書.pdf');
     });
-
-    // 背景キラキラ
-    for(let i=0;i<50;i++){
-      const sparkle=document.createElement('div');
-      sparkle.className='sparkle';
-      sparkle.style.left=Math.random()*window.innerWidth+'px';
-      sparkle.style.top=Math.random()*window.innerHeight+'px';
-      sparkle.style.animationDuration=(2+Math.random()*3)+'s';
-      document.body.appendChild(sparkle);
-    }
   </script>
 </body>
 </html>
