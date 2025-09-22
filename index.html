@@ -37,9 +37,20 @@ button:hover { transform:scale(1.05); background-color:#c04460; }
 
 .result { margin-top:20px; font-size:22px; font-weight:bold; min-height:28px; word-wrap:break-word; transition: transform 0.3s, color 0.3s; }
 
-/* ラジオボタン整列 */
-.radio-group { margin:10px 0; display:flex; justify-content:center; gap:18px; }
-.radio-group label { display:inline-flex; align-items:center; gap:8px; font-size:16px; cursor:pointer; }
+/* ラジオボタン横並び */
+.radio-group {
+  margin:10px 0;
+  display:flex;
+  justify-content:center;
+  gap:40px; /* ボタン間の横間隔 */
+}
+.radio-group label {
+  display:flex;
+  align-items:center;
+  gap:6px; /* 丸と文字の間隔 */
+  font-size:16px;
+  cursor:pointer;
+}
 
 .extra-msg { margin-top:10px; font-size:16px; color:#444; }
 
@@ -59,7 +70,7 @@ button:hover { transform:scale(1.05); background-color:#c04460; }
 #sennin-container.visible { opacity:1; transform: translateY(0); }
 
 #sennin-container img {
-  width: 100px;
+  width: 120px; /* 少し大きく */
   border-radius: 8px;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -72,7 +83,7 @@ button:hover { transform:scale(1.05); background-color:#c04460; }
   font-weight:bold;
 }
 @media (max-width:420px){
-  #sennin-container img { width: 80px; }
+  #sennin-container img { width: 100px; }
   #sennin-container span { font-size:16px; }
 }
 </style>
