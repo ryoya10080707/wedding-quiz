@@ -2,77 +2,190 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>謎解きチャレンジ</title>
+  <title>結婚式 謎解きチャレンジ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap');
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-
-    h1 {
+      font-family: 'Kosugi Maru', sans-serif;
       text-align: center;
+      padding: 20px;
+      background: linear-gradient(120deg, #ffe4e1, #fff0f5);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
     }
-
-    .checkbox-group {
-      display: flex;
-      justify-content: center;
-      gap: 50px;
-      margin: 20px 0;
+    h1 { color:#d4556f; font-size:26px; margin-bottom:15px; text-shadow:1px 1px #fff;}
+    p { font-size:16px; color:#555; margin-bottom:15px; }
+    input, button {
+      padding:14px;
+      font-size:18px;
+      margin:8px 0;
+      width:90%;
+      max-width:320px;
+      border-radius:12px;
+      border:2px solid #d4556f;
+      box-sizing:border-box;
+      transition:0.3s;
     }
+    input:focus { outline:none; border-color:#f080a0; }
+    button { background-color:#d4556f; color:white; border:none; cursor:pointer; transform-origin:center; }
+    button:hover { transform:scale(1.05); background-color:#c04460; }
+    .result { margin-top:20px; font-size:22px; font-weight:bold; min-height:28px; word-wrap:break-word; transition: transform 0.3s, color 0.3s; }
+    /* ラジオボタンの整列修正：ラベルをinline-flexにして縦中央揃え */
+    .radio-group { margin:10px 0; display:flex; justify-content:center; gap:18px; }
+    .radio-group label { display:inline-flex; align-items:center; gap:8px; font-size:16px; cursor:pointer; }
+    .extra-msg { margin-top:10px; font-size:16px; color:#444; }
 
-    .checkbox-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 18px;
-    }
+    /* 背景キラキラ */
+    .sparkle { position:absolute; width:4px; height:4px; background:white; border-radius:50%; opacity:0.8; animation:sparkleAnim 3s linear infinite; }
+    @keyframes sparkleAnim { 0% {transform:translateY(0) scale(1); opacity:0.8;} 50% {opacity:0.3;} 100% {transform:translateY(600px) scale(0.5); opacity:0;} }
 
-    /* 仙人のスタイル */
+    /* 仙人アイコン（最初は目立たない） */
     #sennin {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 150px;
+      width: 64px;
+      height: auto;
+      bottom: 18px;
+      right: 18px;
       opacity: 0;
-      transition: opacity 0.6s ease;
-      z-index: 1000;
+      transform: translateY(12px) scale(0.98);
+      transition: opacity 360ms ease, transform 360ms ease;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 9999;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      pointer-events: auto;
     }
-
     #sennin.visible {
-      opacity: 1;
+      opacity: 0.92;
+      transform: translateY(0) scale(1);
     }
+    @media (max-width:420px){ #sennin { width:52px; bottom:12px; right:12px; } }
   </style>
 </head>
 <body>
-  <h1>謎解きチャレンジ</h1>
+  <h1>💐 結婚式 謎解きチャレンジ 💐</h1>
+  <p>お名前と答え、そして新郎側か新婦側かを選んでください</p>
+  <input type="text" id="name" placeholder="お名前"><br>
+  <input type="text" id="answer" placeholder="答え"><br>
 
-  <div class="checkbox-group">
-    <label class="checkbox-item">
-      <input type="checkbox" name="side" value="groom"> 新郎側
-    </label>
-    <label class="checkbox-item">
-      <input type="checkbox" name="side" value="bride"> 新婦側
-    </label>
+  <div class="radio-group">
+    <label><input type="radio" name="side" value="新郎側"> 新郎側</label>
+    <label><input type="radio" name="side" value="新婦側"> 新婦側</label>
   </div>
 
-  <p>※下にスクロールしていくと仙人が現れるぞ…！</p>
+  <button onclick="checkAnswer()">🎉 送信 🎉</button>
+  <div class="result" id="result"></div>
+  <div class="extra-msg" id="extraMsg"></div>
 
-  <div style="height: 1500px;">
-    <p>ここはスクロール用のスペースです。</p>
-    <p>もっと下に行ってみてください。</p>
-  </div>
-
-  <!-- 仙人イラスト -->
-  <img id="sennin" src="sennin.png" alt="謎解き仙人">
+  <!-- 仙人アイコン（ファイル名は同フォルダの sennin.png を想定）-->
+  <img id="sennin" src="sennin.png" alt="謎解き仙人" title="タップで謎解き指南書をダウンロード" tabindex="0" aria-hidden="false">
 
   <script>
-    const sennin = document.getElementById('sennin');
+    // --- 既存仕様そのまま（正答など） ---
+    const correctAnswers = ["花占い","ハナウラナイ","はなうらない","花うらない","はな占い"];
 
+    function checkAnswer() {
+      const name=document.getElementById("name").value.trim();
+      const answer=document.getElementById("answer").value.trim();
+      const side=document.querySelector('input[name="side"]:checked')?.value;
+      const resultDiv=document.getElementById("result");
+      const extraMsg=document.getElementById("extraMsg");
+      extraMsg.textContent=""; // 前回のメッセージをリセット
+
+      if(!name || !answer || !side){
+        resultDiv.textContent="名前・答え・新郎側/新婦側を選択してください";
+        resultDiv.style.color="orange";
+        return;
+      }
+
+      const normalized=answer.replace(/\s+/g,"").toLowerCase();
+      const isCorrect=correctAnswers.some(ans=>ans.replace(/\s+/g,"").toLowerCase()===normalized);
+
+      if(isCorrect){
+        resultDiv.textContent = `🎉 ${name} さん正解！おめでとう！`;
+        resultDiv.style.color="green";
+        extraMsg.textContent="✅ ゲスト情報が新郎新婦に送信されました";
+        animateResult();
+        sendToGoogleForm(name,answer,side);
+      }else{
+        resultDiv.textContent="❌ 不正解です。もう一度挑戦してね。";
+        resultDiv.style.color="red";
+      }
+    }
+
+    function animateResult(){
+      const resultDiv=document.getElementById("result");
+      resultDiv.animate( [{transform:"scale(1.2)",color:resultDiv.style.color},{transform:"scale(1)"}], {duration:600,easing:"ease-out"} );
+    }
+
+    function sendToGoogleForm(name,answer,side){
+      const formURL="https://docs.google.com/forms/d/e/【GoogleフォームID】/formResponse";
+      const formData=new FormData();
+      formData.append("entry.1234567890",name);
+      formData.append("entry.0987654321",answer);
+      formData.append("entry.1122334455",side);
+      fetch(formURL,{method:"POST",body:formData})
+        .then(()=>console.log("正解者情報を送信"))
+        .catch(()=>console.error("送信失敗"));
+    }
+
+    // 背景キラキラ
+    for(let i=0;i<50;i++){
+      const sparkle=document.createElement('div');
+      sparkle.className='sparkle';
+      sparkle.style.left=Math.random()*window.innerWidth+'px';
+      sparkle.style.top=Math.random()*window.innerHeight+'px';
+      sparkle.style.animationDuration=(2+Math.random()*3)+'s';
+      document.body.appendChild(sparkle);
+    }
+
+    // --- 仙人の出現（スクロールで出す／一度出たら消えない） & PDFダウンロード ---
+    const sennin = document.getElementById('sennin');
+    let senninShown = false;
+    const SCROLL_THRESHOLD = 300; // px：好きに調整可（ページが短ければ小さく）
+
+    // スクロールで一度だけ表示
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 300) {
+      if (!senninShown && window.scrollY > SCROLL_THRESHOLD) {
         sennin.classList.add('visible');
+        senninShown = true;
+      }
+    }, { passive: true });
+
+    // クリック or Enterキー で PDF をダウンロード（guide.pdf を同フォルダに置いてください）
+    sennin.addEventListener('click', () => downloadPDF('guide.pdf','謎解き指南書.pdf'));
+    sennin.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        downloadPDF('guide.pdf','謎解き指南書.pdf');
       }
     });
+
+    async function downloadPDF(path, filename){
+      try{
+        // 同一オリジンなら fetch→blob→download で自動的に落とせる
+        const res = await fetch(path, {cache: "no-cache"});
+        if(!res.ok){
+          // 非200なら新しいタブで開く（ブラウザ依存のダウンロード回避）
+          window.open(path, '_blank');
+          return;
+        }
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }catch(err){
+        // iOSなど fetch がブロックされる場合のフォールバック
+        window.open(path, '_blank');
+      }
+    }
   </script>
 </body>
 </html>
